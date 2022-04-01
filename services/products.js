@@ -24,4 +24,10 @@ const insert = async (name, quantity) => {
   return result;
 };
 
-module.exports = { getAll, getById, getByName, insert };
+const update = async (id, name, quantity) => {
+  const result = await modelProducts.update(id, name, quantity);
+
+  return result;
+};
+
+module.exports = { getAll, getById, getByName, insert, update };

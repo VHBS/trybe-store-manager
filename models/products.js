@@ -10,7 +10,7 @@ const getAll = async () => {
 
 const getById = async (id) => {
   const [[product]] = await connection.execute(
-    'SELECT * FROM StoreManager.products WHERE id = ?',
+    'SELECT * FROM StoreManager.products WHERE id = ?;',
     [id],
   );
 
@@ -19,7 +19,7 @@ const getById = async (id) => {
 
 const getByName = async (name) => {
   const [[product]] = await connection.execute(
-    'SELECT * FROM StoreManager.products WHERE name = ?',
+    'SELECT * FROM StoreManager.products WHERE name = ?;',
     [name],
   );
 
@@ -28,7 +28,7 @@ const getByName = async (name) => {
 
 const insert = async (name, quantity) => {
   const [{ insertId }] = await connection.execute(
-    'INSERT INTO StoreManager.products (name, quantity) VALUES ( ? , ? )',
+    'INSERT INTO StoreManager.products (name, quantity) VALUES ( ? , ? );',
     [name, quantity],
   );
 
@@ -39,4 +39,17 @@ const insert = async (name, quantity) => {
   };
 };
 
-module.exports = { getAll, getById, getByName, insert };
+const update = async (id, name, quantity) => {
+  await connection.execute(
+    'UPDATE StoreManager.products SET name = ?, quantity = ? where id = ?;',
+    [name, quantity, id],
+  );
+
+  return {
+    id,
+    name,
+    quantity,
+  };
+};
+
+module.exports = { getAll, getById, getByName, insert, update };
