@@ -22,6 +22,10 @@ routerProducts.put('/:id',
   middlewareProducts.checkProductExistsById,
   products.update);
 
+routerProducts.delete('/:id',
+  middlewareProducts.checkProductExistsById,
+  products.deleteById);
+
 routerProducts.use(middleError);
 
 module.exports = routerProducts;

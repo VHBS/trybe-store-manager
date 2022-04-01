@@ -43,4 +43,15 @@ const update = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getById, insert, update };
+const deleteById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await servicesProducts.deleteById(id);
+    
+    return res.status(204).end();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = { getAll, getById, insert, update, deleteById };
