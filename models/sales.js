@@ -7,8 +7,8 @@ const getAll = async () => {
       s.date,
       sp.product_id as productId,
       sp.quantity
-    FROM sales s
-    JOIN sales_products sp ON sp.sale_id = s.id
+    FROM StoreManager.sales s
+    JOIN StoreManager.sales_products sp ON sp.sale_id = s.id
     ORDER BY s.id, sp.product_id`,
   );
 
@@ -21,8 +21,8 @@ const getById = async (id) => {
       s.date,
       sp.product_id as productId,
       sp.quantity
-    FROM sales s
-    JOIN sales_products sp ON sp.sale_id = s.id
+    FROM StoreManager.sales s
+    JOIN StoreManager.sales_products sp ON sp.sale_id = s.id
     WHERE s.id = ?
     `,
     [id],

@@ -1,14 +1,19 @@
 const express = require('express');
 const products = require('../controllers/products');
+const middleError = require('../middlewares/error');
 const middlewareProducts = require('../middlewares/products');
 
 const routerProducts = express.Router();
 
-// middleware that is specific to this router
 routerProducts.get('/', products.getAll);
 
-routerProducts.post('/', middlewareProducts.checkProductName, products.insert);
+routerProducts.post('/', 
+  middlewareProducts.middlewareArray, 
+  middlewareProducts.checkProductExistsByName, 
+  products.insert);
 
-routerProducts.get('/:id', middlewareProducts.checkProductId, products.getById);
+routerProducts.get('/:id', middlewareProducts.checkProductExistsById, products.getById);
+
+routerProducts.use(middleError);
 
 module.exports = routerProducts;
