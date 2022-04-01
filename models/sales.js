@@ -2,7 +2,6 @@ const connection = require('./connection');
 
 const getAll = async () => {
   const [allSales] = await connection.execute(
-    // 'SELECT * FROM sales',
     `SELECT
       s.id as saleId,
       s.date,
@@ -18,7 +17,6 @@ const getAll = async () => {
 
 const getById = async (id) => {
   const [product] = await connection.execute(
-    // 'SELECT * FROM sales WHERE id = ?',
     `SELECT
       s.date,
       sp.product_id as productId,
