@@ -12,4 +12,17 @@ const getById = async (id) => {
   return result;
 };
 
-module.exports = { getAll, getById };
+const insertSale = async (array) => {
+  const saleId = await modelSales.insertSale();
+
+  await modelSales.insertSaleProducts(saleId, array);
+
+  const result = await modelSales.getSaleProducts(saleId);
+
+  return {
+    id: saleId,
+    itemsSold: result,
+  };
+};
+
+module.exports = { getAll, getById, insertSale };

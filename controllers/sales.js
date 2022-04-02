@@ -23,4 +23,20 @@ const getById = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getById };
+const insert = async (req, res) => {
+  try {
+    // const { productId, quantity } = req.body[0];
+    const result = await servicesSales.insertSale(req.body);
+
+    res.status(201).json(result);
+    // sales.forEach(async ({ productId, quantity }) => {
+    //   const result = await servicesSales.insert(productId, quantity);
+    // });
+    
+    // return res.status(201).json(result);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = { getAll, getById, insert };
