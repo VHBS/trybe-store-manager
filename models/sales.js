@@ -61,4 +61,21 @@ const getSaleProducts = async (saleId) => {
   return result;
 };
 
-module.exports = { getAll, getById, insertSale, insertSaleProducts, getSaleProducts };
+const updateById = async (saleId, arrayBody) => {
+  const result = arrayBody.map(async ({ productId, quantity }) => {
+    await connection.execute(
+      `UPDATE StoreManager.sales_products
+        SET product_id = ?, quantity = ?
+      WHERE sale_id = ?;`,
+      [productId, quantity, saleId],
+    );
+  });
+  await Promise.all(result);
+
+  return {
+    saleId,
+    itemUpdated: arrayBody,
+  };
+};
+
+module.exports = { getAll, getById, insertSale, insertSaleProducts, getSaleProducts, updateById };

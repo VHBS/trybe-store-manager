@@ -25,4 +25,10 @@ const insertSale = async (array) => {
   };
 };
 
-module.exports = { getAll, getById, insertSale };
+const updateById = async (saleid, array) => {
+  const result = await modelSales.updateById(saleid, array);
+
+  return result;
+};
+
+module.exports = { getAll, getById, insertSale, updateById };

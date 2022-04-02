@@ -11,7 +11,7 @@ routerSales.get('/:id', sales.getById);
 
 routerSales.post('/', middlewareSales.middlewareArraySales, sales.insert);
 
-routerSales.put('/:id', middlewareSales.middlewareArraySales);
+routerSales.put('/:id', middlewareSales.middlewareArraySales, sales.updateById);
 
 routerSales.use(middleError);
 

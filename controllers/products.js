@@ -1,5 +1,7 @@
 const servicesProducts = require('../services/products');
 
+const SERVER_ERROR = 'Ops, algo deu errado!';
+
 const getAll = async (_req, res) => {
   try {
     const result = await servicesProducts.getAll();
@@ -7,6 +9,7 @@ const getAll = async (_req, res) => {
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: SERVER_ERROR });
   }
 };
 
@@ -17,6 +20,7 @@ const getById = async (req, res) => {
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: SERVER_ERROR });
   }
 };
 
@@ -28,6 +32,7 @@ const insert = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: SERVER_ERROR });
   }
 };
 
@@ -40,6 +45,7 @@ const update = async (req, res) => {
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: SERVER_ERROR });
   }
 };
 
@@ -51,6 +57,7 @@ const deleteById = async (req, res) => {
     return res.status(204).end();
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: SERVER_ERROR });
   }
 };
 
