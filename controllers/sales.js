@@ -1,6 +1,6 @@
 const servicesSales = require('../services/sales');
 
-const getAll = async (req, res) => {
+const getAll = async (_req, res) => {
   try {
     const result = await servicesSales.getAll();
   
@@ -35,7 +35,7 @@ const insert = async (req, res) => {
     
     // return res.status(201).json(result);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 };
 

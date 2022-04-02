@@ -1,5 +1,7 @@
 const express = require('express');
 const sales = require('../controllers/sales');
+const middleError = require('../middlewares/error');
+const middlewareSales = require('../middlewares/sales');
 
 const routerSales = express.Router();
 
@@ -7,6 +9,10 @@ routerSales.get('/', sales.getAll);
 
 routerSales.get('/:id', sales.getById);
 
-routerSales.post('/', sales.insert);
+routerSales.post('/', middlewareSales.middlewareArraySales, sales.insert);
+
+routerSales.put('/:id', middlewareSales.middlewareArraySales);
+
+routerSales.use(middleError);
 
 module.exports = routerSales;
