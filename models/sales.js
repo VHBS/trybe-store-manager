@@ -38,44 +38,25 @@ const insertSale = async () => {
   return insertId;
 };
 
-const insertSaleProducts = async (saleId, arrayBody) => {
-  const result = arrayBody.map(async ({ productId, quantity }) => {
-    await connection.execute(
-      `INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) 
-      VALUES (?, ?, ? );`,
-      [saleId, productId, quantity],
-    );
-  });
-  await Promise.all(result);
-};
-
-const getSaleProducts = async (saleId) => {
-  const [result] = await connection.execute(
-    `SELECT sp.product_id as productId, sp.quantity
-      FROM StoreManager.sales s
-      JOIN StoreManager.sales_products sp ON s.id = sp.sale_id
-    WHERE s.id = ?;`,
-    [saleId],
+const insertSaleProducts = async (saleId, productId, quantity) => {
+  const [{ affectedRows }] = await connection.execute(
+    `INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) 
+    VALUES (?, ?, ? );`,
+    [saleId, productId, quantity],
   );
 
-  return result;
+  return affectedRows;
 };
 
-const updateById = async (saleId, arrayBody) => {
-  const result = arrayBody.map(async ({ productId, quantity }) => {
-    await connection.execute(
+const updateById = async (saleId, productId, quantity) => {
+    const [{ affectedRows }] = await connection.execute(
       `UPDATE StoreManager.sales_products
         SET product_id = ?, quantity = ?
       WHERE sale_id = ?;`,
       [productId, quantity, saleId],
     );
-  });
-  await Promise.all(result);
 
-  return {
-    saleId,
-    itemUpdated: arrayBody,
-  };
+  return affectedRows;
 };
 
-module.exports = { getAll, getById, insertSale, insertSaleProducts, getSaleProducts, updateById };
+module.exports = { getAll, getById, insertSale, insertSaleProducts, updateById };

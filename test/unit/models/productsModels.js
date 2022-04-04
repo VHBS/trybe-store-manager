@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const connection = require('../../../models/connection');
 
-describe('Testando os models de Products', () => {
+describe('1 - Testando os models de Products', () => {
 
   const mockProduct = [{ "id": 1, "name": "produto", "quantity": 100 }];
 

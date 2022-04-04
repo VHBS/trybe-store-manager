@@ -15,20 +15,29 @@ const getById = async (id) => {
 const insertSale = async (array) => {
   const saleId = await modelSales.insertSale();
 
-  await modelSales.insertSaleProducts(saleId, array);
+  array.forEach(async ({ productId, quantity }) => {
+    await modelSales.insertSaleProducts(saleId, productId, quantity);
+  });
 
-  const result = await modelSales.getSaleProducts(saleId);
+  await Promise.all(array);
 
   return {
-    id: saleId,
-    itemsSold: result,
-  };
+      id: saleId,
+      itemsSold: array,
+    };
 };
 
 const updateById = async (saleid, array) => {
-  const result = await modelSales.updateById(saleid, array);
+  array.forEach(async ({ productId, quantity }) => {
+    await modelSales.updateById(saleid, productId, quantity);
+  });
 
-  return result;
+  await Promise.all(array);
+  
+  return {
+    saleId: saleid,
+    itemUpdated: array,
+  };
 };
 
 module.exports = { getAll, getById, insertSale, updateById };
