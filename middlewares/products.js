@@ -21,7 +21,7 @@ const checkProductExistsByName = async (req, res, next) => {
   next();
 };
 
-// _______________ Requisito 3 ________________________
+// _______________Requisito 3________________________
 
 const validateName = (req, _res, next) => {
   const { name } = req.body;

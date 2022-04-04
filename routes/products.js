@@ -18,8 +18,7 @@ routerProducts.get('/:id',
   products.getById);
 
 routerProducts.put('/:id',
-  middlewares.middlewareArrayProducts, 
-  middlewareProducts.checkProductExistsById,
+  middlewares.middlewareArrayProducts,
   products.update);
 
 routerProducts.delete('/:id',

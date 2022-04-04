@@ -36,13 +36,19 @@ const insert = async (req, res) => {
   }
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name, quantity } = req.body;
     const result = await servicesProducts.update(id, name, quantity);
+
+    if (!result || result === 0) return next({ code: 404, message: 'Product not found' });
     
-    return res.status(200).json(result);
+    return res.status(200).json({
+      id,
+      name,
+      quantity,
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: SERVER_ERROR });
