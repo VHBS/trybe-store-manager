@@ -2,10 +2,9 @@ const { expect } = require('chai');
 const productsController = require('../../../controllers/products');
 const productServices = require('../../../services/products');
 const sinon = require('sinon');
-require("dotenv").config();
 
 
-describe('5 - Testando os controllerts de Products', () => {
+describe('5 - Testando os controllers de Products', () => {
   describe('Testando os Try Catches', () => {
 
     const errorMessage = {
