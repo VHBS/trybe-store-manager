@@ -34,7 +34,7 @@ describe('1 - Testando os models de Products', () => {
       connection.execute.restore();
     });
 
-    it('Retornando pelo id', async () => {
+    it('Retornando um Produto através do id', async () => {
       const result = await productModel.getById();
 
       expect(result.id).equals(1);

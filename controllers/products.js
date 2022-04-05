@@ -15,9 +15,10 @@ const getAll = async (_req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const result = req.product;
+    const { id } = req.params;
+    const result = await servicesProducts.getById(id);
   
-    return res.status(200).json(result);
+    return res.status(result.code).json(result.message);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: SERVER_ERROR });
@@ -27,28 +28,23 @@ const getById = async (req, res) => {
 const insert = async (req, res) => {
   try {
     const { name, quantity } = req.body;
+
     const result = await servicesProducts.insert(name, quantity);
     
-    return res.status(201).json(result);
+    return res.status(result.code).json(result.message);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: SERVER_ERROR });
   }
 };
 
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, quantity } = req.body;
     const result = await servicesProducts.update(id, name, quantity);
-
-    if (!result || result === 0) return next({ code: 404, message: 'Product not found' });
     
-    return res.status(200).json({
-      id,
-      name,
-      quantity,
-    });
+    return res.status(result.code).json(result.message);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: SERVER_ERROR });
@@ -58,9 +54,9 @@ const update = async (req, res, next) => {
 const deleteById = async (req, res) => {
   try {
     const { id } = req.params;
-    await servicesProducts.deleteById(id);
+    const result = await servicesProducts.deleteById(id);
     
-    return res.status(204).end();
+    return res.status(result.code).json(result.message).end();
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: SERVER_ERROR });

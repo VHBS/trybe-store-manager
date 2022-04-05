@@ -1,43 +1,72 @@
 const modelSales = require('../models/sales');
+// const modelProducts = require('../models/products');
+
+const SERVER_ERROR = 'Ops, algo deu errado!';
 
 const getAll = async () => {
-  const result = await modelSales.getAll();
+  try {
+    const result = await modelSales.getAll();
 
-  return result;
+    return result;
+  } catch (err) {
+    console.log(err);
+    return { code: 500, message: SERVER_ERROR };
+  }
 };
 
 const getById = async (id) => {
-  const result = await modelSales.getById(id);
+  try {
+    const result = await modelSales.getById(id);
 
-  return result;
+    if (result.length === 0) return { code: 404, message: { message: 'Sale not found' } };
+
+    return { code: 200, message: result };
+  } catch (err) {
+    console.log(err);
+    return { code: 500, message: SERVER_ERROR };
+  }
 };
 
 const insertSale = async (array) => {
-  const saleId = await modelSales.insertSale();
+  try {
+    const saleId = await modelSales.insertSale();
+    array.forEach(async ({ productId, quantity }) => {
+      // const productExists = await modelProducts.getById(productId);
 
-  array.forEach(async ({ productId, quantity }) => {
-    await modelSales.insertSaleProducts(saleId, productId, quantity);
-  });
+      // console.log(productExists);
 
-  await Promise.all(array);
+      // if (!productExists) return { code: 404, message: { message: 'Product not found' } };
 
-  return {
-      id: saleId,
-      itemsSold: array,
+      await modelSales.insertSaleProducts(saleId, productId, quantity);
+    });
+    await Promise.all(array);
+    return { code: 201, message: { id: saleId, itemsSold: array },
     };
+  } catch (err) {
+    console.log(err);
+    return { code: 500, message: SERVER_ERROR };
+  }
 };
 
 const updateById = async (saleid, array) => {
-  array.forEach(async ({ productId, quantity }) => {
-    await modelSales.updateById(saleid, productId, quantity);
-  });
+  try {
+    array.forEach(async ({ productId, quantity }) => {
+      await modelSales.updateById(saleid, productId, quantity);
+    });
 
-  await Promise.all(array);
-  
-  return {
-    saleId: saleid,
-    itemUpdated: array,
-  };
+    await Promise.all(array);
+
+    return {
+      code: 200,
+      message: {
+        saleId: saleid,
+        itemUpdated: array,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return { code: 500, message: SERVER_ERROR };
+  }
 };
 
 module.exports = { getAll, getById, insertSale, updateById };

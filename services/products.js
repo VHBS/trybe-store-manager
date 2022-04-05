@@ -1,39 +1,43 @@
 const modelProducts = require('../models/products');
 
 const getAll = async () => {
-  const result = await modelProducts.getAll();
+    const result = await modelProducts.getAll();
 
-  return result;
+    return result;
 };
 
 const getById = async (id) => {
-  const result = await modelProducts.getById(id);
+    const result = await modelProducts.getById(id);
 
-  return result;
-};
+    if (!result) return { code: 404, message: { message: 'Product not found' } };
 
-const getByName = async (name) => {
-  const result = await modelProducts.getByName(name);
-
-  return result;
+    return { code: 200, message: result };
 };
 
 const insert = async (name, quantity) => {
-  const result = await modelProducts.insert(name, quantity);
+    const exist = await modelProducts.getByName(name);
 
-  return result;
+    if (exist) return { code: 409, message: { message: 'Product already exists' } };
+
+    const result = await modelProducts.insert(name, quantity);
+
+    return { code: 201, message: result };
 };
 
 const update = async (id, name, quantity) => {
   const result = await modelProducts.update(id, name, quantity);
 
-  return result;
+  if (!result || result === 0) return { code: 404, message: { message: 'Product not found' } };
+
+  return { code: 200, message: { id, name, quantity } };
 };
 
 const deleteById = async (id) => {
   const result = await modelProducts.deleteById(id);
 
-  return result;
+  if (!result) return { code: 404, message: { message: 'Product not found' } };
+
+  return { code: 204 };
 };
 
-module.exports = { getAll, getById, getByName, insert, update, deleteById };
+module.exports = { getAll, getById, insert, update, deleteById };

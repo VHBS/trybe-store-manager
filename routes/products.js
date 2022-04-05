@@ -1,7 +1,6 @@
 const express = require('express');
 const products = require('../controllers/products');
 const middleError = require('../middlewares/error');
-const middlewareProducts = require('../middlewares/products');
 const middlewares = require('../middlewares/products');
 
 const routerProducts = express.Router();
@@ -9,12 +8,10 @@ const routerProducts = express.Router();
 routerProducts.get('/', products.getAll);
 
 routerProducts.post('/', 
-  middlewares.middlewareArrayProducts, 
-  middlewareProducts.checkProductExistsByName, 
+  middlewares.middlewareArrayProducts,
   products.insert);
 
 routerProducts.get('/:id',
-  middlewareProducts.checkProductExistsById,
   products.getById);
 
 routerProducts.put('/:id',
@@ -22,7 +19,6 @@ routerProducts.put('/:id',
   products.update);
 
 routerProducts.delete('/:id',
-  middlewareProducts.checkProductExistsById,
   products.deleteById);
 
 routerProducts.use(middleError);
