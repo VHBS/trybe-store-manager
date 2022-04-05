@@ -5,7 +5,7 @@ const SERVER_ERROR = 'Ops, algo deu errado!';
 const getAll = async (_req, res) => {
   try {
     const result = await servicesProducts.getAll();
-  
+
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
