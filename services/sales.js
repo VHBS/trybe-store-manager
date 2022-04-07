@@ -1,5 +1,5 @@
 const modelSales = require('../models/sales');
-// const modelProducts = require('../models/products');
+const modelProducts = require('../models/products');
 
 const getAll = async () => {
     const result = await modelSales.getAll();
@@ -17,15 +17,17 @@ const getById = async (id) => {
 
 const insertSale = async (array) => {
     const saleId = await modelSales.insertSale();
+
+    const productsBody = await Promise.all(array
+      .map( async ({productId}) => await modelProducts.getById(productId)));
+
+    if (productsBody.some((item) => !item)) 
+      return { code: 404, message: { message: 'Product not found' } };
+
     array.forEach(async ({ productId, quantity }) => {
-      // const productExists = await modelProducts.getById(productId);
-
-      // console.log(productExists);
-
-      // if (!productExists) return { code: 404, message: { message: 'Product not found' } };
-
       await modelSales.insertSaleProducts(saleId, productId, quantity);
     });
+
     await Promise.all(array);
     return { code: 201, message: { id: saleId, itemsSold: array },
     };

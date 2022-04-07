@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const salesService = require('../../../services/sales');
 const salesModel = require('../../../models/sales');
+const productModel = require('../../../models/products');
 
 describe('4 - Testando os services de Sales', () => {
 
@@ -67,8 +68,11 @@ describe('4 - Testando os services de Sales', () => {
   });
 
   describe('Insere uma Venda', () => {
+    describe('Testando condições', () => {
 
-    const mockInsertSale = [
+      const mockErrorMessage = { message: 'Product not found' };
+
+      const mockInsertSale = [
         {
           "productId": 2,
           "quantity": 15
@@ -79,20 +83,54 @@ describe('4 - Testando os services de Sales', () => {
         }
       ]
 
-    before(() => {
-      sinon.stub(salesModel, 'insertSale').resolves(1);
-      sinon.stub(salesModel, 'insertSaleProducts').resolves(mockInsertSale);
+      before(() => {
+        sinon.stub(productModel, 'getById').resolves();
+        sinon.stub(salesModel, 'insertSale').resolves(1);
+      });
+      
+      after(() => {
+        productModel.getById.restore();
+        salesModel.insertSale.restore();
+      });
+
+      it('Não retornando nova venda', async () => {
+        const result = await salesService.insertSale(mockInsertSale);
+
+        expect(result.message).deep.equals(mockErrorMessage);
+      });
+
     });
 
-    after(() => {
-      salesModel.insertSale.restore();
-      salesModel.insertSaleProducts.restore();
-    });
+    describe('Testando fora das condições', () => {
 
-    it('Retornando nova venda', async () => {
-      const result = await salesService.insertSale(mockInsertSale);
+      const mockInsertSale = [
+          {
+            "productId": 2,
+            "quantity": 15
+          },
+          {
+            "productId": 3,
+            "quantity": 10
+          }
+        ]
 
-      expect(result.message).deep.equals({id: 1, itemsSold: mockInsertSale});
+      before(() => {
+        sinon.stub(productModel, 'getById').resolves({});
+        sinon.stub(salesModel, 'insertSale').resolves(1);
+        sinon.stub(salesModel, 'insertSaleProducts').resolves(mockInsertSale);
+      });
+
+      after(() => {
+        productModel.getById.restore();
+        salesModel.insertSale.restore();
+        salesModel.insertSaleProducts.restore();
+      });
+
+      it('Retornando nova venda', async () => {
+        const result = await salesService.insertSale(mockInsertSale);
+
+        expect(result.message).deep.equals({id: 1, itemsSold: mockInsertSale});
+      });
     });
   });
 
