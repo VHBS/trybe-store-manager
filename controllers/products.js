@@ -56,7 +56,7 @@ const deleteById = async (req, res) => {
     const { id } = req.params;
     const result = await servicesProducts.deleteById(id);
     
-    return res.status(result.code).end();
+    return res.status(result.code).json(result.message).end();
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: SERVER_ERROR });

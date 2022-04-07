@@ -53,11 +53,10 @@ const updateById = async (req, res) => {
 const deleteById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('teste');
 
     const result = await servicesSales.deleteById(id);
 
-    return res.status(result.code).end();
+    return res.status(result.code).json(result.message).end();
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({ message: SERVER_ERROR });
