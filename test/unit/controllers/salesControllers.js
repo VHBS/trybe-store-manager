@@ -209,5 +209,41 @@ describe('6 - Testando os controllers de Sales', () => {
       });
     });
 
+    describe('deleteById try result', () => {
+
+      before(() => {
+        request.params = {};
+
+        sinon.stub(saleServices, 'deleteById').resolves({ code: 204 });
+      });
+
+      after(() => {
+        saleServices.deleteById.restore();
+      });
+
+      it('Sucesso', async () => {
+        const teste = await salesController.deleteById(request, response);
+
+        expect(response.status.calledWith(204)).to.be.true;
+        expect(response.end.calledWith()).to.be.true;
+      });
+    });
+
+    describe('deleteById catch result', () => {
+      before(() => {
+        sinon.stub(saleServices, 'deleteById').rejects(errorMessage)
+      });
+
+      after(() => {
+        saleServices.deleteById.restore();
+      });
+
+      it('Erro', async () => {
+        await salesController.deleteById(request, response);
+
+        expect(response.status.calledWith(500)).equal(true);
+        expect(response.json.calledWith(errorMessage)).to.be.true;
+      });
+    });
   });
 });

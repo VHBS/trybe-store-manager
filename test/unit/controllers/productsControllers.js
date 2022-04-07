@@ -199,7 +199,6 @@ describe('5 - Testando os controllers de Products', () => {
         await productsController.deleteById(request, response);
 
         expect(response.status.calledWith(204)).to.be.true;
-        expect(response.json.calledWith()).to.be.true;
         expect(response.end.calledWith()).to.be.true;
       });
     });
