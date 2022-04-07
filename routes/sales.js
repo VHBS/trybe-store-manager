@@ -13,6 +13,8 @@ routerSales.post('/', middlewareSales.middlewareArraySales, sales.insert);
 
 routerSales.put('/:id', middlewareSales.middlewareArraySales, sales.updateById);
 
+routerSales.delete('/:id', sales.deleteById);
+
 routerSales.use(middleError);
 
 module.exports = routerSales;

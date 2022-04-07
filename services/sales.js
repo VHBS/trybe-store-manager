@@ -49,4 +49,12 @@ const updateById = async (saleid, array) => {
     };
 };
 
-module.exports = { getAll, getById, insertSale, updateById };
+const deleteById = async (id) => {
+  const result = await modelSales.deleteById(id);
+
+  if (!result) return { code: 404, message: { "message": "Sale not found" } };
+
+  return { code: 204 }
+}
+
+module.exports = { getAll, getById, insertSale, updateById, deleteById };

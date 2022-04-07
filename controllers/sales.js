@@ -50,4 +50,17 @@ const updateById = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getById, insert, updateById };
+const deleteById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await servicesSales.deleteById(id);
+
+    return res.status(result.code).json(result.message);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ message: SERVER_ERROR });
+  }
+}
+
+module.exports = { getAll, getById, insert, updateById, deleteById };
