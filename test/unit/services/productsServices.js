@@ -182,6 +182,6 @@ describe('3 - Testando os services de Products', () => {
   
         expect(result).deep.equals({code: 204});
       });
-    })
+    });
   });
 })

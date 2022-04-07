@@ -158,4 +158,41 @@ describe('4 - Testando os services de Sales', () => {
       expect(result.message).to.deep.equals({saleId: 1, itemUpdated: mockUpdateSale});
     });
   });
+
+  describe('Deleta uma Venda', () => {
+    describe('Testando condições', () => {
+      before(() => {
+        sinon.stub(salesModel, 'deleteById').resolves(false);
+      });
+  
+      after(() => {
+        salesModel.deleteById.restore();
+  
+      });
+  
+      it('Não deletando um produto', async () => {
+        const result = await salesService.deleteById();
+  
+        expect(result.message).deep.equals({ "message": "Sale not found" });
+      });
+    });
+
+    describe('Testando fora das condições', () => {
+      before(() => {
+        sinon.stub(salesModel, 'deleteById').resolves(1);
+      });
+  
+      after(() => {
+        salesModel.deleteById.restore();
+  
+      });
+  
+      it('Deletando um produto', async () => {
+        const result = await salesService.deleteById(1);
+  
+        expect(result).deep.equals({code: 204});
+      });
+    })
+
+  })
 })
