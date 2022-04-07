@@ -106,5 +106,11 @@ describe('2 - Testando os models de Sales', () => {
 
       expect(result).equals(1);
     });
+
+    it('Deletando uma venda', async () => {
+      const result = await salesModel.deleteById()
+
+      expect(result).equals(1);
+    });
   });
 })
