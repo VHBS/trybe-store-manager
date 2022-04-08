@@ -45,6 +45,8 @@ const update = async (id, name, quantity) => {
     [name, quantity, id],
   );
 
+  console.log('update');
+
   return affectedRows;
 };
 
@@ -57,4 +59,11 @@ const deleteById = async (id) => {
   return affectedRows;
 };
 
-module.exports = { getAll, getById, getByName, insert, update, deleteById };
+module.exports = { 
+  getAll,
+  getById, 
+  getByName,
+  insert,
+  update,
+  deleteById,
+};

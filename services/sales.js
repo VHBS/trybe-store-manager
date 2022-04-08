@@ -1,5 +1,6 @@
 const modelSales = require('../models/sales');
 const modelProducts = require('../models/products');
+// const modelProducts = require('../models/products');
 
 const getAll = async () => {
     const result = await modelSales.getAll();
@@ -15,22 +16,46 @@ const getById = async (id) => {
     return { code: 200, message: result };
 };
 
+const checkProductExists = async (array) => {
+  if (array.some((item) => !item)) return true;
+    
+  return false;
+};
+
+const checkQuantityProducts = (productsInDb, productsReq) => {
+  let result = false;
+  for (let index = 0; index < productsInDb.length; index += 1) {
+    if (productsInDb[index].quantity - productsReq[index].quantity < 0) {
+      result = true;
+    }
+  };
+
+  return result;
+};
+
 const insertSale = async (array) => {
-    const saleId = await modelSales.insertSale();
+  const productsBody = await Promise.all(array
+    .map( async ({productId}) => await modelProducts.getById(productId)));
+  
+  if(await checkProductExists(productsBody)) 
+  return { code: 404, message: { message: 'Product not found' } };
 
-    const productsBody = await Promise.all(array
-      .map( async ({productId}) => await modelProducts.getById(productId)));
+  if(checkQuantityProducts(productsBody, array))
+    return { code: 422, message: { message: "Such amount is not permitted to sell" } };
 
-    if (productsBody.some((item) => !item)) 
-      return { code: 404, message: { message: 'Product not found' } };
+  const saleId = await modelSales.insertSale();
 
-    array.forEach(async ({ productId, quantity }) => {
-      await modelSales.insertSaleProducts(saleId, productId, quantity);
-    });
+  array.forEach( async ({ productId, quantity }, index) => {
+    const quantidade = productsBody[index].quantity - quantity;
+    await modelSales.insertSaleProducts(saleId, productId, quantity);
+    await modelProducts.update(productsBody[index].id, productsBody[index].name, quantidade);
+  });
+  
+  await Promise.all(array);
 
-    await Promise.all(array);
-    return { code: 201, message: { id: saleId, itemsSold: array },
-    };
+  console.log('fim');
+  return { code: 201, message: { id: saleId, itemsSold: array },
+  };
 };
 
 const updateById = async (saleid, array) => {
