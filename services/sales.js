@@ -53,7 +53,6 @@ const insertSale = async (array) => {
   
   await Promise.all(array);
 
-  console.log('fim');
   return { code: 201, message: { id: saleId, itemsSold: array },
   };
 };
@@ -75,6 +74,18 @@ const updateById = async (saleid, array) => {
 };
 
 const deleteById = async (id) => {
+  const produtos = await modelSales.getById(id);
+
+  const productsBody = await Promise.all(produtos
+    .map( async ({productId}) => await modelProducts.getById(productId)));
+
+  produtos.forEach(async ({productId, quantity}, index) => {
+    const quantidade = productsBody[index].quantity + quantity;
+    await modelProducts.update(productId, productsBody[index].name, quantidade);
+  })
+
+  await Promise.all(produtos);
+  
   const result = await modelSales.deleteById(id);
 
   if (!result) return { code: 404, message: { "message": "Sale not found" } };

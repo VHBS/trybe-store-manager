@@ -45,8 +45,6 @@ const update = async (id, name, quantity) => {
     [name, quantity, id],
   );
 
-  console.log('update');
-
   return affectedRows;
 };
 

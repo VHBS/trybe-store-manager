@@ -159,7 +159,7 @@ describe('4 - Testando os services de Sales', () => {
     });
   });
 
-  describe('Deleta uma Venda', () => {
+  describe.only('Deleta uma Venda', () => {
     describe('Testando condições', () => {
       before(() => {
         sinon.stub(salesModel, 'deleteById').resolves(false);
