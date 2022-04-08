@@ -66,6 +66,6 @@ const deleteById = async (id) => {
   );
 
   return affectedRows;
-}
+};
 
 module.exports = { getAll, getById, insertSale, insertSaleProducts, updateById, deleteById };

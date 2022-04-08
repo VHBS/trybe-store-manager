@@ -61,6 +61,6 @@ const deleteById = async (req, res) => {
     console.log(err.message);
     return res.status(500).json({ message: SERVER_ERROR });
   }
-}
+};
 
 module.exports = { getAll, getById, insert, updateById, deleteById };
